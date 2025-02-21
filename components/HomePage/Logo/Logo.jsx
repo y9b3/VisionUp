@@ -7,7 +7,7 @@ export function Logo() {
     <View style={s.header}>
       <Image style={s.logo} source={VisionUpLogo}></Image>
       <Text style={s.text}>
-        EXPOSEZ{"\n"}ECHANGEZ{"\n"}PROGRESSEZ pakdfg
+        EXPOSEZ{"\n"}ECHANGEZ{"\n"}PROGRESSEZ
       </Text>
     </View>
   );
