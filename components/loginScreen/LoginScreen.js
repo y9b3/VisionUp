@@ -14,7 +14,7 @@ import {
   Kanit_800ExtraBold_Italic,
 } from "@expo-google-fonts/kanit";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   let [fontsLoaded] = useFonts({ Kanit_700Bold, Kanit_800ExtraBold_Italic });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,7 +31,7 @@ const LoginScreen = () => {
   return (
     <View style={styles.container}>
       {/* Logo */}
-      <Image source={require("../assets/logo.png")} style={styles.logo} />
+      <Image source={require("../../assets/logo.png")} style={styles.logo} />
 
       {/* Slogan */}
       <Text style={styles.subtitle}>
@@ -77,7 +77,10 @@ const LoginScreen = () => {
         </TouchableOpacity>
 
         {/* Bouton Inscription */}
-        <TouchableOpacity style={styles.registerButton}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Inscription")}
+          style={styles.registerButton}
+        >
           <Text style={styles.registerButtonText}>INSCRIPTION</Text>
         </TouchableOpacity>
       </View>
