@@ -1,28 +1,24 @@
-import { View, Text, SafeAreaView } from "react-native";
-import s from "./App.style";
-import { Logo } from "./components/HomePage/Logo/Logo";
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { Checkbox } from 'react-native-paper'; 
 import { useFonts, Kanit_700Bold } from "@expo-google-fonts/kanit";
+import LoginScreen from "./components/LoginScreen";
 
-export default function HomeScreen({ navigation }) {
-  const [fontsLoaded] = useFonts({
-    Kanit: Kanit_700Bold,
-  });
+const Stack = createStackNavigator();
+
+export default function App() {
+  let [fontsLoaded] = useFonts({ Kanit_700Bold });
 
   if (!fontsLoaded) {
     return null;
   }
 
   return (
-    <SafeAreaView style={s.container}>
-      <View style={s.workspace}>
-        <Logo />
-        <Text style={s.text}>Input Email</Text>
-        <Text style={s.text}>Input MDP</Text>
-        <Text style={s.text}>Restez connecté</Text>
-        <Text style={s.text}>Mot de passe oublié</Text>
-        <Text style={s.text}>Btn Connexion</Text>
-        <Text style={s.text}>Inscription</Text>
-      </View>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={LoginScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
