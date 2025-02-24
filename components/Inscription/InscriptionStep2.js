@@ -105,7 +105,8 @@ const InscriptionStep2 = ({ route, navigation }) => {
           onChangeText={setPseudo}
         />
         <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
-          <Text style={styles.uploadButtonText}>📸 Choisir une photo</Text>
+          <Text style={styles.uploadIcon}>📷</Text>
+          <Text style={styles.uploadButtonText}>Choisir une photo</Text>
         </TouchableOpacity>
         {profileImage && (
           <Image source={{ uri: profileImage }} style={styles.profileImage} />

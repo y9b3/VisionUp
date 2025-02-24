@@ -1,12 +1,5 @@
-import React, { useState, useRef } from "react";
-import {
-  Animated,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { styles } from "./Inscription.style";
 
 const InscriptionStep1 = ({ navigation }) => {
@@ -15,43 +8,28 @@ const InscriptionStep1 = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Animation de glitch
-  const shakeAnimation = useRef(new Animated.Value(0)).current;
-
-  const triggerShake = () => {
-    Animated.sequence([
-      Animated.timing(shakeAnimation, {
-        toValue: 10,
-        duration: 50,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shakeAnimation, {
-        toValue: -10,
-        duration: 50,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shakeAnimation, {
-        toValue: 10,
-        duration: 50,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shakeAnimation, {
-        toValue: 0,
-        duration: 50,
-        useNativeDriver: true,
-      }),
-    ]).start();
+  // Vérification des critères de mot de passe
+  const passwordValidations = {
+    minLength: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    lowercase: /[a-z]/.test(password),
+    number: /[0-9]/.test(password),
+    specialChar: /[!@#$%^&*]/.test(password),
   };
 
   const handleNextStep = () => {
     if (!email || !password || !confirmPassword) {
       setErrorMessage("Tous les champs doivent être remplis !");
-      triggerShake();
       return;
     }
     if (password !== confirmPassword) {
       setErrorMessage("Les mots de passe ne correspondent pas !");
-      triggerShake();
+      return;
+    }
+    if (!Object.values(passwordValidations).every(Boolean)) {
+      setErrorMessage(
+        "Le mot de passe ne respecte pas les critères de sécurité !"
+      );
       return;
     }
 
@@ -59,18 +37,15 @@ const InscriptionStep1 = ({ navigation }) => {
     navigation.navigate("InscriptionStep2", { email, password });
   };
 
-  const isDisabled = !email || !password || !confirmPassword;
+  const isDisabled =
+    !email ||
+    !password ||
+    !confirmPassword ||
+    password !== confirmPassword ||
+    !Object.values(passwordValidations).every(Boolean);
 
   return (
-    <Animated.View
-      style={[
-        styles.container,
-        { transform: [{ translateX: shakeAnimation }] },
-      ]}
-    >
-      {/* Logo */}
-      <Image source={require("../../assets/logo.png")} style={styles.logo} />
-
+    <View style={styles.container}>
       <Text style={styles.subtitle}>INSCRIPTION - ÉTAPE 1</Text>
       {errorMessage ? (
         <Text style={styles.errorText}>{errorMessage}</Text>
@@ -99,6 +74,50 @@ const InscriptionStep1 = ({ navigation }) => {
           secureTextEntry
         />
 
+        {/* Indicateurs de sécurité du mot de passe */}
+        <View style={styles.passwordCriteriaContainer}>
+          <Text
+            style={[
+              styles.passwordCriteria,
+              passwordValidations.minLength && styles.validCriteria,
+            ]}
+          >
+            • Au moins 8 caractères
+          </Text>
+          <Text
+            style={[
+              styles.passwordCriteria,
+              passwordValidations.uppercase && styles.validCriteria,
+            ]}
+          >
+            • Au moins une majuscule
+          </Text>
+          <Text
+            style={[
+              styles.passwordCriteria,
+              passwordValidations.lowercase && styles.validCriteria,
+            ]}
+          >
+            • Au moins une minuscule
+          </Text>
+          <Text
+            style={[
+              styles.passwordCriteria,
+              passwordValidations.number && styles.validCriteria,
+            ]}
+          >
+            • Au moins un chiffre
+          </Text>
+          <Text
+            style={[
+              styles.passwordCriteria,
+              passwordValidations.specialChar && styles.validCriteria,
+            ]}
+          >
+            • Au moins un caractère spécial (!@#$%^&*)
+          </Text>
+        </View>
+
         {/* Bouton Suivant */}
         <TouchableOpacity
           style={[styles.nextButton, isDisabled && styles.disabledButton]}
@@ -107,13 +126,15 @@ const InscriptionStep1 = ({ navigation }) => {
         >
           <Text style={styles.buttonText}>SUIVANT</Text>
         </TouchableOpacity>
+
+        {/* Bouton pour revenir à la connexion */}
         <TouchableOpacity onPress={() => navigation.navigate("Login")}>
           <Text style={styles.loginRedirect}>
             Déjà un compte ? Connecte-toi
           </Text>
         </TouchableOpacity>
       </View>
-    </Animated.View>
+    </View>
   );
 };
 
