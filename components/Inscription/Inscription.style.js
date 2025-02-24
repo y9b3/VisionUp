@@ -1,132 +1,81 @@
 import { StyleSheet, Dimensions } from "react-native";
 import theme from "../../styles/theme";
 
-const { height } = Dimensions.get("window"); // Récupérer la hauteur de l'écran
+const { height } = Dimensions.get("window");
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
     alignItems: "center",
-    justifyContent: "space-between", // Optimisé pour petits écrans
-    paddingVertical: height < 700 ? 10 : theme.spacing.large,
+    paddingHorizontal: theme.spacing.medium,
+    paddingVertical: height < 700 ? theme.spacing.small : theme.spacing.large, // Ajustement selon l'écran
   },
   logo: {
-    width: height < 700 ? 130 : 150,
-    height: height < 700 ? 130 : 150,
-    marginBottom: theme.spacing.large,
-  },
-  uploadButton: {
-    paddingVertical: theme.spacing.medium,
-    paddingHorizontal: theme.spacing.large,
-    borderRadius: theme.borderRadius.medium,
-    width: "80%",
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "center",
-    marginBottom: theme.spacing.medium,
-    borderWidth: 2,
-    borderColor: "#000",
-    shadowColor: "#000",
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  uploadButtonText: {
-    color: "#000",
-    fontSize: 18,
-    fontFamily: theme.fonts.bold,
-    marginLeft: theme.spacing.small,
-  },
-  uploadIcon: {
-    fontSize: 24,
+    width: height < 700 ? 100 : 120, // Taille ajustée sur petits écrans
+    height: height < 700 ? 100 : 120,
+    marginBottom: height < 700 ? 10 : theme.spacing.large,
   },
   subtitle: {
-    fontSize: height < 700 ? 26 : 30,
+    fontSize: height < 700 ? 24 : 32,
     color: theme.colors.text,
     textAlign: "center",
     fontFamily: theme.fonts.extraBoldItalic,
     fontStyle: "italic",
-    marginBottom: theme.spacing.large,
-    lineHeight: 40,
+    marginBottom: height < 700 ? 10 : 20, // Moins d’espace sous le titre
   },
   formContainer: {
     width: "100%",
     alignItems: "center",
-    marginTop: theme.spacing.medium,
+    marginTop: height < 700 ? 5 : 15, // Moins d’espace avant les inputs
   },
   input: {
-    width: "80%",
-    height: 45,
+    width: "85%",
+    height: 50,
     backgroundColor: theme.colors.inputBackground,
     borderRadius: theme.borderRadius.medium,
     paddingHorizontal: theme.spacing.medium,
     fontSize: 16,
     fontFamily: theme.fonts.bold,
     color: theme.colors.inputText,
-    marginBottom: height < 700 ? theme.spacing.small : theme.spacing.medium,
+    marginBottom: height < 700 ? 8 : theme.spacing.medium, // Moins d’espace entre les inputs
   },
   passwordCriteriaContainer: {
-    marginVertical: theme.spacing.medium,
-    alignItems: "flex-start",
-    width: "80%",
+    marginTop: height < 700 ? 8 : theme.spacing.medium,
+    marginBottom: height < 700 ? 8 : theme.spacing.medium, // Ajustement du bas
     padding: theme.spacing.small,
     backgroundColor: "rgba(255, 255, 255, 0.1)",
     borderRadius: theme.borderRadius.medium,
-  },
-  passwordCriteria: {
-    flexDirection: "row",
-    alignItems: "center",
-    color: "#A9A9A9",
-    fontSize: 14,
-    fontStyle: "italic",
-    marginBottom: theme.spacing.small,
-  },
-  validCriteria: {
-    color: "#3AB54A",
-    fontWeight: "bold",
-  },
-  criteriaIcon: {
-    fontSize: 18,
-    marginRight: theme.spacing.small,
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginTop: theme.spacing.small,
-    marginBottom: theme.spacing.medium,
+    width: "85%",
   },
   nextButton: {
-    backgroundColor: theme.colors.buttonPrimary,
     paddingVertical: theme.spacing.medium,
     borderRadius: theme.borderRadius.medium,
-    width: "80%",
+    width: "85%", // Correspond mieux à la largeur des inputs
     alignItems: "center",
-    marginBottom: theme.spacing.small,
+    marginTop: height < 700 ? 10 : theme.spacing.small,
   },
-  registerButton: {
-    backgroundColor: theme.colors.buttonPrimary,
-    paddingVertical: theme.spacing.medium,
-    borderRadius: theme.borderRadius.medium,
-    width: "80%",
-    alignItems: "center",
-    marginBottom: theme.spacing.medium,
+  enabledButton: {
+    backgroundColor: theme.colors.buttonPrimary, // ✅ Vert si actif
+  },
+  disabledButton: {
+    backgroundColor: "#A9A9A9", // ✅ Gris si inactif
   },
   buttonText: {
-    color: theme.colors.text,
     fontSize: 18,
     fontFamily: theme.fonts.bold,
   },
-  disabledButton: {
-    backgroundColor: "#A9A9A9",
+  enabledText: {
+    color: "#FFF", // ✅ Texte blanc si actif
+  },
+  disabledText: {
+    color: "#D3D3D3", // ✅ Texte plus clair si inactif
   },
   loginRedirect: {
     color: theme.colors.text,
     fontSize: 16,
     textAlign: "center",
-    marginTop: theme.spacing.medium,
+    marginTop: height < 700 ? 10 : theme.spacing.medium,
     fontWeight: "bold",
   },
 });

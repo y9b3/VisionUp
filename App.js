@@ -3,24 +3,42 @@ import {
   TransitionPresets,
 } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+import { View, ActivityIndicator } from "react-native";
 import LoginScreen from "./components/loginScreen/LoginScreen";
 import InscriptionStep1 from "./components/Inscription/InscriptionStep1";
 import InscriptionStep2 from "./components/Inscription/InscriptionStep2";
+import { useFonts } from "expo-font"; // Import des fonts
+import {
+  Kanit_400Regular,
+  Kanit_700Bold,
+  Kanit_800ExtraBold_Italic,
+} from "@expo-google-fonts/kanit";
 
 const Stack = createStackNavigator();
 
 export default function App() {
+  let [fontsLoaded] = useFonts({
+    Kanit_400Regular,
+    Kanit_700Bold,
+    Kanit_800ExtraBold_Italic,
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#1E3A8A" />
+      </View>
+    );
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* Écran de connexion */}
         <Stack.Screen
           name="Login"
           component={LoginScreen}
-          options={{ animationTypeForReplace: "push" }} // Effet de push pour le retour
+          options={{ animationTypeForReplace: "push" }}
         />
-
-        {/* Étape 1 de l'inscription */}
         <Stack.Screen
           name="InscriptionStep1"
           component={InscriptionStep1}
@@ -31,7 +49,7 @@ export default function App() {
                   {
                     scale: current.progress.interpolate({
                       inputRange: [0, 1],
-                      outputRange: [0.5, 1], // Zoom progressif de 0.5x à 1x
+                      outputRange: [0.5, 1],
                     }),
                   },
                 ],
@@ -39,8 +57,6 @@ export default function App() {
             }),
           }}
         />
-
-        {/* Étape 2 de l'inscription */}
         <Stack.Screen
           name="InscriptionStep2"
           component={InscriptionStep2}
@@ -51,7 +67,7 @@ export default function App() {
                   {
                     translateX: current.progress.interpolate({
                       inputRange: [0, 1],
-                      outputRange: [500, 0], // Slide in depuis la droite
+                      outputRange: [500, 0],
                     }),
                   },
                 ],

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useState, useRef } from "react";
 import {
+  Animated,
   View,
   Text,
   TextInput,
@@ -8,7 +8,9 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./Inscription.style";
 import theme from "../../styles/theme";
 
@@ -17,6 +19,34 @@ const InscriptionStep1 = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  // Animation de glitch
+  const shakeAnimation = useRef(new Animated.Value(0)).current;
+
+  const triggerShake = () => {
+    Animated.sequence([
+      Animated.timing(shakeAnimation, {
+        toValue: 10,
+        duration: 50,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shakeAnimation, {
+        toValue: -10,
+        duration: 50,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shakeAnimation, {
+        toValue: 10,
+        duration: 50,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shakeAnimation, {
+        toValue: 0,
+        duration: 50,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
 
   // Vérification des critères de mot de passe
   const passwordValidations = {
@@ -27,32 +57,33 @@ const InscriptionStep1 = ({ navigation }) => {
     specialChar: /[!@#$%^&*]/.test(password),
   };
 
+  // Vérifier si tout est rempli et valide
+  const isPasswordValid = Object.values(passwordValidations).every(Boolean);
+  const isFormValid = email && password && confirmPassword;
+  const isNextButtonEnabled = isFormValid && isPasswordValid;
+
   const handleNextStep = () => {
-    if (!email || !password || !confirmPassword) {
-      setErrorMessage("Tous les champs doivent être remplis !");
+    if (!isFormValid) {
+      setErrorMessage("❌ Remplissez tous les champs !");
       return;
     }
-    if (password !== confirmPassword) {
-      setErrorMessage("Les mots de passe ne correspondent pas !");
-      return;
-    }
-    if (!Object.values(passwordValidations).every(Boolean)) {
+
+    if (!isPasswordValid) {
       setErrorMessage(
-        "Le mot de passe ne respecte pas les critères de sécurité !"
+        "❌ Le mot de passe ne respecte pas les critères de sécurité !"
       );
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setErrorMessage("❌ Oups, le mot de passe ne correspond pas !");
+      triggerShake();
       return;
     }
 
     setErrorMessage("");
     navigation.navigate("InscriptionStep2", { email, password });
   };
-
-  const isDisabled =
-    !email ||
-    !password ||
-    !confirmPassword ||
-    password !== confirmPassword ||
-    !Object.values(passwordValidations).every(Boolean);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
@@ -64,8 +95,22 @@ const InscriptionStep1 = ({ navigation }) => {
           contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
         >
-          <View style={styles.container}>
+          <Animated.View
+            style={[
+              styles.container,
+              { transform: [{ translateX: shakeAnimation }] },
+            ]}
+          >
+            {/* 🔹 Logo en haut */}
+            <Image
+              source={require("../../assets/logo.png")}
+              style={styles.logo}
+            />
+
+            {/* Titre */}
             <Text style={styles.subtitle}>INSCRIPTION - ÉTAPE 1</Text>
+
+            {/* Message d'erreur */}
             {errorMessage ? (
               <Text style={styles.errorText}>{errorMessage}</Text>
             ) : null}
@@ -141,13 +186,27 @@ const InscriptionStep1 = ({ navigation }) => {
                 </Text>
               </View>
 
-              {/* Bouton Suivant */}
+              {/* Bouton Suivant (dynamique : grisé → vert) */}
               <TouchableOpacity
-                style={[styles.nextButton, isDisabled && styles.disabledButton]}
+                style={[
+                  styles.nextButton,
+                  isNextButtonEnabled
+                    ? styles.enabledButton
+                    : styles.disabledButton,
+                ]}
                 onPress={handleNextStep}
-                disabled={isDisabled}
+                disabled={!isNextButtonEnabled}
               >
-                <Text style={styles.buttonText}>SUIVANT</Text>
+                <Text
+                  style={[
+                    styles.buttonText,
+                    isNextButtonEnabled
+                      ? styles.enabledText
+                      : styles.disabledText,
+                  ]}
+                >
+                  SUIVANT
+                </Text>
               </TouchableOpacity>
 
               {/* Bouton pour revenir à la connexion */}
@@ -157,7 +216,7 @@ const InscriptionStep1 = ({ navigation }) => {
                 </Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </Animated.View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

@@ -8,7 +8,7 @@ import {
   Image,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { styles } from "./Inscription.style";
+import { styles } from "./InscriptionStep2.style";
 
 const InscriptionStep2 = ({ route, navigation }) => {
   const { email, password } = route.params;
