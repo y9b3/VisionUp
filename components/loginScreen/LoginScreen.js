@@ -11,15 +11,23 @@ import {
 import { styles } from "./LoginScreen.style";
 import theme from "../../styles/theme";
 
-const { height } = Dimensions.get("window"); // Obtenir la hauteur de l'écran
+const { height } = Dimensions.get("window");
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
+    if (!email || !password) {
+      alert("Veuillez remplir tous les champs !");
+      return;
+    }
+
     console.log("Email:", email);
     console.log("Mot de passe:", password);
+
+    // ✅ Navigation vers LoadingScreen AVANT HomeScreen
+    navigation.navigate("Loading");
   };
 
   return (
@@ -40,7 +48,7 @@ const LoginScreen = ({ navigation }) => {
             <TextInput
               style={styles.input}
               placeholder="Entrer votre e-mail"
-              placeholderTextColor="#B0C4DE"
+              placeholderTextColor={theme.colors.placeholderTextColor}
               keyboardType="email-address"
               value={email}
               onChangeText={setEmail}
@@ -52,7 +60,7 @@ const LoginScreen = ({ navigation }) => {
             <TextInput
               style={styles.input}
               placeholder="Entrer votre mot de passe"
-              placeholderTextColor="#B0C4DE"
+              placeholderTextColor={theme.colors.placeholderTextColor}
               secureTextEntry
               value={password}
               onChangeText={setPassword}

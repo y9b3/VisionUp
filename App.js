@@ -7,6 +7,9 @@ import { View, ActivityIndicator } from "react-native";
 import LoginScreen from "./components/loginScreen/LoginScreen";
 import InscriptionStep1 from "./components/Inscription/InscriptionStep1";
 import InscriptionStep2 from "./components/Inscription/InscriptionStep2";
+import HomeScreen from "./components/HomeScreen/HomeScreen"; 
+import LoadingScreen from "./components/LoadingScreen/LoadingScreen"; // ✅ Ajout de LoadingScreen
+
 import { useFonts } from "expo-font"; // Import des fonts
 import {
   Kanit_400Regular,
@@ -38,6 +41,20 @@ export default function App() {
           name="Login"
           component={LoginScreen}
           options={{ animationTypeForReplace: "push" }}
+        />
+        <Stack.Screen
+          name="Loading"
+          component={LoadingScreen} // ✅ Ajout de l'écran de chargement
+          options={{
+            cardStyleInterpolator: TransitionPresets.FadeFromBottomAndroid.cardStyleInterpolator, // ✅ Effet de fondu
+          }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen} // ✅ HomeScreen après LoadingScreen
+          options={{
+            cardStyleInterpolator: TransitionPresets.FadeFromBottomAndroid.cardStyleInterpolator, // ✅ Animation fluide
+          }}
         />
         <Stack.Screen
           name="InscriptionStep1"
