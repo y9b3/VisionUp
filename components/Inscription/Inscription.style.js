@@ -4,18 +4,18 @@ import theme from "../../styles/theme";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background, // Utilisation du thème
+    backgroundColor: theme.colors.background,
     alignItems: "center",
     justifyContent: "center",
     padding: theme.spacing.large,
   },
   logo: {
-    width: 190,
-    height: 190,
-    marginBottom: -20,
+    width: 150,
+    height: 150,
+    marginBottom: theme.spacing.large, // Ajout d'un espace sous le logo
   },
   subtitle: {
-    fontSize: 38,
+    fontSize: 30,
     color: theme.colors.text,
     textAlign: "center",
     fontFamily: theme.fonts.extraBoldItalic,
@@ -28,82 +28,76 @@ export const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
   },
-  inputContainer: {
-    width: "70%",
-  },
-  label: {
-    color: theme.colors.text,
-    fontSize: 14,
-    fontFamily: theme.fonts.bold,
-    marginBottom: theme.spacing.small,
-  },
   input: {
-    width: "100%",
-    height: 45,
-    placeholderTextColor: theme.colors.placeholderTextColor,
+    width: "80%",
+    height: 50, // Augmenté pour un meilleur confort
     backgroundColor: theme.colors.inputBackground,
     borderRadius: theme.borderRadius.medium,
     paddingHorizontal: theme.spacing.medium,
-    fontSize: 14,
-    fontFamily: theme.fonts.bold,
-    color: theme.colors.inputText,
-    marginBottom: theme.spacing.small,
-  },
-  forgotPasswordContainer: {
-    width: "70%",
-    alignItems: "flex-start",
-    marginBottom: theme.spacing.medium,
-  },
-  forgotPassword: {
-    color: theme.colors.error,
-    fontSize: 12,
-    fontFamily: theme.fonts.bold,
-    textDecorationLine: "underline",
-  },
-  loginButton: {
-    backgroundColor: theme.colors.buttonPrimary,
-    paddingVertical: theme.spacing.medium,
-    paddingHorizontal: theme.spacing.large,
-    borderRadius: theme.borderRadius.medium,
-    width: "70%",
-    alignItems: "center",
-    marginBottom: theme.spacing.small,
-  },
-  loginButtonText: {
-    color: theme.colors.text,
     fontSize: 16,
     fontFamily: theme.fonts.bold,
+    color: theme.colors.inputText,
+    marginBottom: theme.spacing.medium, // Plus d'espace entre les inputs
   },
-  registerButton: {
+  errorText: {
+    color: theme.colors.error,
+    fontSize: 14,
+    textAlign: "center",
+    marginBottom: theme.spacing.small,
+    fontWeight: "bold",
+  },
+  uploadButton: {
     backgroundColor: theme.colors.buttonSecondary,
     paddingVertical: theme.spacing.medium,
     paddingHorizontal: theme.spacing.large,
     borderRadius: theme.borderRadius.medium,
-    width: "70%",
+    width: "80%",
     alignItems: "center",
-    borderWidth: 2,
-    borderColor: theme.colors.buttonBorder,
+    marginBottom: theme.spacing.medium,
   },
-  registerButtonText: {
-    color: theme.colors.secondary,
+  uploadButtonText: {
+    color: theme.colors.text,
     fontSize: 16,
     fontFamily: theme.fonts.bold,
   },
-  loginRedirect: {
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginTop: theme.spacing.small,
+    marginBottom: theme.spacing.medium,
+  },
+  nextButton: {
+    backgroundColor: theme.colors.buttonPrimary, // Vert si actif
+    paddingVertical: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.large,
+    borderRadius: theme.borderRadius.medium,
+    width: "80%",
+    alignItems: "center",
+    marginBottom: theme.spacing.small,
+  },
+  registerButton: {
+    backgroundColor: theme.colors.buttonPrimary,
+    paddingVertical: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.large,
+    borderRadius: theme.borderRadius.medium,
+    width: "80%",
+    alignItems: "center",
+    marginBottom: theme.spacing.medium,
+  },
+  buttonText: {
     color: theme.colors.text,
     fontSize: 18,
-    textAlign: "center",
-    marginTop: theme.spacing.large,
-    fontWeight: "bold",
-  },
-  errorText: {
-    color: "#FF0000", // Rouge pour l'erreur
-    fontSize: 14,
-    textAlign: "center",
-    marginBottom: 10,
-    fontWeight: "bold",
+    fontFamily: theme.fonts.bold,
   },
   disabledButton: {
-    backgroundColor: "#A9A9A9", // Gris foncé pour le bouton désactivé
+    backgroundColor: "#A9A9A9", // Gris pour l'état désactivé
+  },
+  loginRedirect: {
+    color: theme.colors.text, // Texte blanc ou autre couleur
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: theme.spacing.medium,
+    fontWeight: "bold",
   },
 });

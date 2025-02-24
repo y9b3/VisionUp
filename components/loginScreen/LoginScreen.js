@@ -78,7 +78,7 @@ const LoginScreen = ({ navigation }) => {
 
         {/* Bouton Inscription */}
         <TouchableOpacity
-          onPress={() => navigation.navigate("Inscription")}
+          onPress={() => navigation.navigate("InscriptionStep1")}
           style={styles.registerButton}
         >
           <Text style={styles.registerButtonText}>INSCRIPTION</Text>
