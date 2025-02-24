@@ -1,74 +1,49 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import theme from "../../styles/theme";
+
+const { height } = Dimensions.get("window"); // Récupérer la hauteur de l'écran
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
     alignItems: "center",
-    justifyContent: "center",
-    padding: theme.spacing.large,
+    justifyContent: "space-between", // Optimisé pour petits écrans
+    paddingVertical: height < 700 ? 10 : theme.spacing.large,
   },
   logo: {
-    width: 150,
-    height: 150,
-    marginBottom: theme.spacing.large, // Ajout d'un espace sous le logo
+    width: height < 700 ? 130 : 150,
+    height: height < 700 ? 130 : 150,
+    marginBottom: theme.spacing.large,
   },
-
   uploadButton: {
-    // Fond gris clair pour bien ressortir
     paddingVertical: theme.spacing.medium,
     paddingHorizontal: theme.spacing.large,
     borderRadius: theme.borderRadius.medium,
     width: "80%",
     alignItems: "center",
-    flexDirection: "row", // Pour aligner l'icône et le texte horizontalement
+    flexDirection: "row",
     justifyContent: "center",
     marginBottom: theme.spacing.medium,
-    borderWidth: 2, // Ajoute une bordure
-    borderColor: "#000", // Bordure noire bien visible
-    shadowColor: "#000", // Ombre pour donner du relief
-    shadowOffset: { width: 3, height: 3 }, // Position de l'ombre
-    shadowOpacity: 0.5, // Intensité de l'ombre
-    shadowRadius: 4, // Effet de flou pour l'ombre
-    elevation: 5, // Ombre sur Android
-  },
-  passwordCriteriaContainer: {
-    marginVertical: theme.spacing.medium,
-    alignItems: "flex-start",
-    width: "80%",
-    padding: theme.spacing.small,
-    backgroundColor: "rgba(255, 255, 255, 0.1)", // Légère transparence pour fond distinct
-    borderRadius: theme.borderRadius.medium,
-  },
-  passwordCriteria: {
-    flexDirection: "row", // Pour aligner l'icône et le texte
-    alignItems: "center",
-    color: "#A9A9A9", // Gris par défaut
-    fontSize: 16,
-    fontStyle: "italic",
-    textDecorationLine: "none",
-    marginBottom: theme.spacing.small,
-  },
-  validCriteria: {
-    color: "#3AB54A", // Passe en vert quand la condition est remplie
-    fontWeight: "bold",
-  },
-  criteriaIcon: {
-    fontSize: 18,
-    marginRight: theme.spacing.small, // Espacement entre l'icône et le texte
+    borderWidth: 2,
+    borderColor: "#000",
+    shadowColor: "#000",
+    shadowOffset: { width: 3, height: 3 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 5,
   },
   uploadButtonText: {
-    color: "#000", // Texte noir pour bien ressortir
+    color: "#000",
     fontSize: 18,
     fontFamily: theme.fonts.bold,
-    marginLeft: theme.spacing.small, // Espace entre l’icône et le texte
+    marginLeft: theme.spacing.small,
   },
   uploadIcon: {
-    fontSize: 24, // Icône plus grande
+    fontSize: 24,
   },
   subtitle: {
-    fontSize: 30,
+    fontSize: height < 700 ? 26 : 30,
     color: theme.colors.text,
     textAlign: "center",
     fontFamily: theme.fonts.extraBoldItalic,
@@ -77,27 +52,44 @@ export const styles = StyleSheet.create({
     lineHeight: 40,
   },
   formContainer: {
-    marginTop: theme.spacing.large,
     width: "100%",
     alignItems: "center",
+    marginTop: theme.spacing.medium,
   },
   input: {
     width: "80%",
-    height: 50, // Augmenté pour un meilleur confort
+    height: 45,
     backgroundColor: theme.colors.inputBackground,
     borderRadius: theme.borderRadius.medium,
     paddingHorizontal: theme.spacing.medium,
     fontSize: 16,
     fontFamily: theme.fonts.bold,
     color: theme.colors.inputText,
-    marginBottom: theme.spacing.medium, // Plus d'espace entre les inputs
+    marginBottom: height < 700 ? theme.spacing.small : theme.spacing.medium,
   },
-  errorText: {
-    color: theme.colors.error,
+  passwordCriteriaContainer: {
+    marginVertical: theme.spacing.medium,
+    alignItems: "flex-start",
+    width: "80%",
+    padding: theme.spacing.small,
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    borderRadius: theme.borderRadius.medium,
+  },
+  passwordCriteria: {
+    flexDirection: "row",
+    alignItems: "center",
+    color: "#A9A9A9",
     fontSize: 14,
-    textAlign: "center",
+    fontStyle: "italic",
     marginBottom: theme.spacing.small,
+  },
+  validCriteria: {
+    color: "#3AB54A",
     fontWeight: "bold",
+  },
+  criteriaIcon: {
+    fontSize: 18,
+    marginRight: theme.spacing.small,
   },
   profileImage: {
     width: 100,
@@ -107,9 +99,8 @@ export const styles = StyleSheet.create({
     marginBottom: theme.spacing.medium,
   },
   nextButton: {
-    backgroundColor: theme.colors.buttonPrimary, // Vert si actif
+    backgroundColor: theme.colors.buttonPrimary,
     paddingVertical: theme.spacing.medium,
-    paddingHorizontal: theme.spacing.large,
     borderRadius: theme.borderRadius.medium,
     width: "80%",
     alignItems: "center",
@@ -118,7 +109,6 @@ export const styles = StyleSheet.create({
   registerButton: {
     backgroundColor: theme.colors.buttonPrimary,
     paddingVertical: theme.spacing.medium,
-    paddingHorizontal: theme.spacing.large,
     borderRadius: theme.borderRadius.medium,
     width: "80%",
     alignItems: "center",
@@ -130,10 +120,10 @@ export const styles = StyleSheet.create({
     fontFamily: theme.fonts.bold,
   },
   disabledButton: {
-    backgroundColor: "#A9A9A9", // Gris pour l'état désactivé
+    backgroundColor: "#A9A9A9",
   },
   loginRedirect: {
-    color: theme.colors.text, // Texte blanc ou autre couleur
+    color: theme.colors.text,
     fontSize: 16,
     textAlign: "center",
     marginTop: theme.spacing.medium,
