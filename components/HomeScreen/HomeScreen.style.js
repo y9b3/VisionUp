@@ -1,40 +1,67 @@
-import React from "react";
-import { View, Text, Image } from "react-native";
-import { styles } from "./HomeScreen.style";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from "react-native-reanimated";
-import { PanGestureHandler } from "react-native-gesture-handler";
+import { StyleSheet, Dimensions } from "react-native";
 
-const HomeScreen = () => {
-  const translateY = useSharedValue(0);
+const { height } = Dimensions.get("window");
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: translateY.value }],
-  }));
-
-  const onGestureEvent = (event) => {
-    if (event.nativeEvent.translationY < -50) {
-      translateY.value = withSpring(-50); // Swipe vers le haut
-    } else if (event.nativeEvent.translationY > 50) {
-      translateY.value = withSpring(0); // Swipe vers le bas (retour position initiale)
-    }
-  };
-
-  return (
-    <View style={styles.container}>
-      {/* SWIPE HANDLER */}
-      <PanGestureHandler onGestureEvent={onGestureEvent}>
-        <Animated.View style={[styles.videoContainer, animatedStyle]}>
-          <Image source={require("../../assets/video_placeholder.png")} style={styles.videoPlaceholder} />
-          
-          {/* DESCRIPTION EN PREMIER PLAN */}
-          <View style={styles.descriptionBox}>
-            <Text style={styles.descriptionText}>Bienvenue sur VisionUp</Text>
-            <Text style={styles.descriptionText}>Découvrez les startups et échangez avec elles</Text>
-          </View>
-        </Animated.View>
-      </PanGestureHandler>
-    </View>
-  );
-};
-
-export default HomeScreen;
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#1E3A8A",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  header: {
+    width: "100%",
+    height: height * 0.12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    paddingTop: 75,
+  },
+  logo: {
+    width: 70,
+    height: 70,
+  },
+  title: {
+    fontSize: 22,
+    color: "#FFF",
+    fontFamily: "Kanit_700Bold",
+  },
+  videoContainer: {
+    width: "95%",
+    backgroundColor: "#0A1B3D",
+    borderRadius: 25,
+    overflow: "hidden",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  descriptionBox: {
+    position: "absolute",
+    bottom: 10,
+    width: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    alignItems: "center",
+    zIndex: 10,
+  },
+  descriptionText: {
+    color: "#FFF",
+    fontSize: 14,
+    fontFamily: "Kanit_700Bold",
+    textAlign: "center",
+  },
+  bottomNav: {
+    width: "90%",
+    height: 65,
+    backgroundColor: "#162D6A",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    borderRadius: 30,
+    marginBottom: height * 0.03,
+  },
+  navItem: {
+    padding: 10,
+  },
+});

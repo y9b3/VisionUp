@@ -4,7 +4,6 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  StyleSheet,
   Dimensions,
 } from "react-native";
 import { useFonts, Kanit_700Bold } from "@expo-google-fonts/kanit";
@@ -17,8 +16,9 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated";
 import { GestureDetector, Gesture } from "react-native-gesture-handler";
+import { styles } from "./HomeScreen.style";
 
-const { width, height } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 
 // 🔥 LISTE DES STARTUPS
 const startups = [
@@ -48,6 +48,7 @@ const HomeScreen = () => {
   const translateY = useSharedValue(0);
   const translateX = useSharedValue(0);
   const opacity = useSharedValue(1);
+  const bottomNavOpacity = useSharedValue(1); // Ajout pour la barre de navigation
   const containerHeight = useSharedValue(height * 0.68);
   const containerPosition = useSharedValue(0);
 
@@ -60,6 +61,10 @@ const HomeScreen = () => {
     ],
     height: containerHeight.value,
     opacity: opacity.value,
+  }));
+
+  const bottomNavStyle = useAnimatedStyle(() => ({
+    opacity: bottomNavOpacity.value,
   }));
 
   const goToNextStartup = () => {
@@ -84,10 +89,12 @@ const HomeScreen = () => {
         containerHeight.value = withSpring(height * 0.35);
         containerPosition.value = withSpring(-height * 0.26);
         translateY.value = withSpring(0);
+        bottomNavOpacity.value = withTiming(0, { duration: 300 }); // Disparition progressive de la barre de navigation
       } else if (event.translationY > 50) {
         containerHeight.value = withSpring(height * 0.68);
         containerPosition.value = withSpring(0);
         translateY.value = withSpring(0);
+        bottomNavOpacity.value = withTiming(1, { duration: 300 }); // Réapparition progressive de la barre de navigation
       }
 
       if (event.translationX < -100 || event.translationX > 100) {
@@ -131,7 +138,7 @@ const HomeScreen = () => {
       </GestureDetector>
 
       {/* Barre de navigation */}
-      <View style={styles.bottomNav}>
+      <Animated.View style={[styles.bottomNav, bottomNavStyle]}>
         <TouchableOpacity style={styles.navItem}>
           <FontAwesome5 name="users" size={24} color="#FFF" />
         </TouchableOpacity>
@@ -141,28 +148,9 @@ const HomeScreen = () => {
         <TouchableOpacity style={styles.navItem}>
           <Ionicons name="person-outline" size={24} color="#FFF" />
         </TouchableOpacity>
-      </View>
+      </Animated.View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#1E3A8A", alignItems: "center", justifyContent: "space-between" },
-  header: { 
-    width: "100%", 
-    height: height * 0.12, 
-    flexDirection: "row", 
-    alignItems: "center", 
-    justifyContent: "space-between", 
-    paddingHorizontal: 20, 
-    paddingTop: 75,
-  },
-  logo: { width: 70, height: 70 },
-  title: { fontSize: 22, color: "#FFF", fontFamily: "Kanit_700Bold" },
-  videoContainer: { width: "95%", backgroundColor: "#0A1B3D", borderRadius: 25, overflow: "hidden", justifyContent: "center", alignItems: "center" },
-  bottomNav: { width: "90%", height: 65, backgroundColor: "#162D6A", flexDirection: "row", justifyContent: "space-around", alignItems: "center", borderRadius: 30, marginBottom: height * 0.03 },
-  descriptionBox: { position: "absolute", bottom: 10, width: "100%", backgroundColor: "rgba(0, 0, 0, 0.7)", paddingVertical: 12, paddingHorizontal: 15, alignItems: "center", zIndex: 10 },
-  descriptionText: { color: "#FFF", fontSize: 14, fontFamily: "Kanit_700Bold", textAlign: "center" },
-});
 
 export default HomeScreen;
