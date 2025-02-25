@@ -48,7 +48,8 @@ const HomeScreen = () => {
   const translateY = useSharedValue(0);
   const translateX = useSharedValue(0);
   const opacity = useSharedValue(1);
-  const bottomNavOpacity = useSharedValue(1); // Ajout pour la barre de navigation
+  const bottomNavOpacity = useSharedValue(1); // Opacité de la barre de navigation
+  const feedbackButtonsOpacity = useSharedValue(0); // Opacité des boutons feedback
   const containerHeight = useSharedValue(height * 0.68);
   const containerPosition = useSharedValue(0);
 
@@ -65,6 +66,10 @@ const HomeScreen = () => {
 
   const bottomNavStyle = useAnimatedStyle(() => ({
     opacity: bottomNavOpacity.value,
+  }));
+
+  const feedbackButtonsStyle = useAnimatedStyle(() => ({
+    opacity: feedbackButtonsOpacity.value,
   }));
 
   const goToNextStartup = () => {
@@ -90,11 +95,13 @@ const HomeScreen = () => {
         containerPosition.value = withSpring(-height * 0.26);
         translateY.value = withSpring(0);
         bottomNavOpacity.value = withTiming(0, { duration: 300 }); // Disparition progressive de la barre de navigation
+        feedbackButtonsOpacity.value = withTiming(1, { duration: 300 }); // Apparition des boutons feedback
       } else if (event.translationY > 50) {
         containerHeight.value = withSpring(height * 0.68);
         containerPosition.value = withSpring(0);
         translateY.value = withSpring(0);
-        bottomNavOpacity.value = withTiming(1, { duration: 300 }); // Réapparition progressive de la barre de navigation
+        bottomNavOpacity.value = withTiming(1, { duration: 300 }); // Réapparition de la barre de navigation
+        feedbackButtonsOpacity.value = withTiming(0, { duration: 300 }); // Disparition des boutons feedback
       }
 
       if (event.translationX < -100 || event.translationX > 100) {
@@ -147,6 +154,16 @@ const HomeScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem}>
           <Ionicons name="person-outline" size={24} color="#FFF" />
+        </TouchableOpacity>
+      </Animated.View>
+
+      {/* Boutons de Feedback */}
+      <Animated.View style={[styles.feedbackButtonsContainer, feedbackButtonsStyle]}>
+        <TouchableOpacity style={[styles.feedbackButton, styles.feedbackGreen]}>
+          <Text style={styles.feedbackButtonText}>RÉDIGEZ UN FEEDBACK</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.feedbackButton, styles.feedbackBlue]}>
+          <Text style={styles.feedbackButtonText}>ENVOYEZ</Text>
         </TouchableOpacity>
       </Animated.View>
     </View>

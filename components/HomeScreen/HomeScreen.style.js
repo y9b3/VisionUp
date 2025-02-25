@@ -1,11 +1,12 @@
 import { StyleSheet, Dimensions } from "react-native";
+import theme from "../../styles/theme";
 
 const { height } = Dimensions.get("window");
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1E3A8A",
+    backgroundColor: theme.colors.background,
     alignItems: "center",
     justifyContent: "space-between",
   },
@@ -35,6 +36,16 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  bottomNav: {
+    width: "90%",
+    height: 65,
+    backgroundColor: "#162D6A",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    borderRadius: 30,
+    marginBottom: height * 0.03,
+  },
   descriptionBox: {
     position: "absolute",
     bottom: 10,
@@ -51,17 +62,32 @@ export const styles = StyleSheet.create({
     fontFamily: "Kanit_700Bold",
     textAlign: "center",
   },
-  bottomNav: {
+
+  // ✅ NOUVEAUX STYLES POUR LES BOUTONS FEEDBACK ✅
+  feedbackButtonsContainer: {
+    position: "absolute",
+    bottom: height * 0.04, // Même position que la barre de navigation
     width: "90%",
-    height: 65,
-    backgroundColor: "#162D6A",
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     alignItems: "center",
-    borderRadius: 30,
-    marginBottom: height * 0.03,
+    opacity: 0, // Commence invisible, géré par Animated
   },
-  navItem: {
-    padding: 10,
+  feedbackButton: {
+    width: "38%", // Réduction de la largeur
+    paddingVertical: 14, // Bouton plus fin
+    borderRadius: 23, // Coins moins arrondis
+    alignItems: "center",
+  },
+  feedbackGreen: {
+    backgroundColor: "#3AB54A", // 🟩 Vert pour rédiger un feedback
+  },
+  feedbackBlue: {
+    backgroundColor: "#0074FF", // 🔵 Bleu pour envoyer
+  },
+  feedbackButtonText: {
+    color: "#FFF",
+    fontSize: 10, // Texte légèrement plus petit
+    fontFamily: "Kanit_700Bold",
   },
 });
