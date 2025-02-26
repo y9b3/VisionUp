@@ -136,4 +136,9 @@ export const styles = StyleSheet.create({
   secondQuestion: {
     top: height * 0.57, // Positionné sous la première question
   },
+
+  // ✅ STYLES DE LA TROISIÈME QUESTION ✅
+  thirdQuestion: {
+    top: height * 0.71, // Positionné sous la deuxième question
+  },
 });

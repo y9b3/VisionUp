@@ -20,26 +20,10 @@ import { styles } from "./HomeScreen.style";
 
 const { height } = Dimensions.get("window");
 
-// 🔥 LISTE DES STARTUPS
 const startups = [
-  {
-    name: "Startup 1",
-    sector: "Tech",
-    description: "Une startup innovante en technologie.",
-    video: require("../../assets/video_placeholder.png"),
-  },
-  {
-    name: "Startup 2",
-    sector: "Finance",
-    description: "Une startup révolutionnant la finance.",
-    video: require("../../assets/video_placeholder.png"),
-  },
-  {
-    name: "Startup 3",
-    sector: "Éducation",
-    description: "Une startup pour l'éducation numérique.",
-    video: require("../../assets/video_placeholder.png"),
-  },
+  { name: "Startup 1", sector: "Tech", description: "Une startup innovante en technologie.", video: require("../../assets/video_placeholder.png") },
+  { name: "Startup 2", sector: "Finance", description: "Une startup révolutionnant la finance.", video: require("../../assets/video_placeholder.png") },
+  { name: "Startup 3", sector: "Éducation", description: "Une startup pour l'éducation numérique.", video: require("../../assets/video_placeholder.png") },
 ];
 
 const HomeScreen = () => {
@@ -57,6 +41,7 @@ const HomeScreen = () => {
   const [currentStartupIndex, setCurrentStartupIndex] = useState(0);
   const [selectedOption1, setSelectedOption1] = useState(null);
   const [selectedOption2, setSelectedOption2] = useState(null);
+  const [selectedOption3, setSelectedOption3] = useState(null);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -87,7 +72,6 @@ const HomeScreen = () => {
     opacity.value = withTiming(1, { duration: 200 });
   };
 
-  // 📌 GESTURE HANDLER POUR LE SWIPE
   const swipeGesture = Gesture.Pan()
     .onUpdate((event) => {
       if (Math.abs(event.translationX) > Math.abs(event.translationY)) {
@@ -129,7 +113,6 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* HEADER */}
       <View style={styles.header}>
         <Image source={require("../../assets/logo.png")} style={styles.logo} />
         <Text style={styles.title}>FRIEND'S FEED</Text>
@@ -138,12 +121,9 @@ const HomeScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* SWIPE CONTAINER */}
       <GestureDetector gesture={swipeGesture}>
         <Animated.View style={[styles.videoContainer, animatedStyle]}>
           <Image source={startups[currentStartupIndex].video} style={styles.videoPlaceholder} />
-
-          {/* Description */}
           <View style={styles.descriptionBox}>
             <Text style={styles.descriptionText}>{startups[currentStartupIndex].name}</Text>
             <Text style={styles.descriptionText}>{startups[currentStartupIndex].sector}</Text>
@@ -154,9 +134,9 @@ const HomeScreen = () => {
 
       {/* QUESTIONS ET RÉPONSES */}
       <Animated.View style={[styles.questionContainer, questionsStyle]}>
-        <Text style={styles.questionText}>Que pensez-vous du projet ?</Text>
+        <Text style={styles.questionText}>Question 1</Text>
         <View style={styles.optionsContainer}>
-          {["Excellent", "Moyen", "À améliorer"].map((option) => (
+          {["Choix 1", "Choix 2", "Choix 3"].map((option) => (
             <TouchableOpacity
               key={option}
               style={[
@@ -173,9 +153,9 @@ const HomeScreen = () => {
 
       {/* DEUXIÈME QUESTION */}
       <Animated.View style={[styles.questionContainer, styles.secondQuestion, questionsStyle]}>
-        <Text style={styles.questionText}>Le projet est-il innovant ?</Text>
+        <Text style={styles.questionText}>Question 2</Text>
         <View style={styles.optionsContainer}>
-          {["Oui", "Non", "Peut-être"].map((option) => (
+          {["Choix 1", "Choix 2", "Choix 3"].map((option) => (
             <TouchableOpacity
               key={option}
               style={[
@@ -190,7 +170,25 @@ const HomeScreen = () => {
         </View>
       </Animated.View>
 
-      {/* Barre de navigation */}
+      {/* TROISIÈME QUESTION */}
+      <Animated.View style={[styles.questionContainer, styles.thirdQuestion, questionsStyle]}>
+        <Text style={styles.questionText}>Question 3</Text>
+        <View style={styles.optionsContainer}>
+          {["Choix 1", "Choix 2", "Choix 3"].map((option) => (
+            <TouchableOpacity
+              key={option}
+              style={[
+                styles.optionButton,
+                selectedOption3 === option && styles.optionButtonSelected,
+              ]}
+              onPress={() => setSelectedOption3(option)}
+            >
+              <Text style={styles.optionText}>{option}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </Animated.View>
+
       <Animated.View style={[styles.bottomNav, bottomNavStyle]}>
         <TouchableOpacity style={styles.navItem}>
           <FontAwesome5 name="users" size={24} color="#FFF" />
@@ -203,7 +201,6 @@ const HomeScreen = () => {
         </TouchableOpacity>
       </Animated.View>
 
-      {/* Boutons de Feedback */}
       <Animated.View style={[styles.feedbackButtonsContainer, feedbackButtonsStyle]}>
         <TouchableOpacity style={[styles.feedbackButton, styles.feedbackGreen]}>
           <Text style={styles.feedbackButtonText}>RÉDIGEZ UN FEEDBACK</Text>
