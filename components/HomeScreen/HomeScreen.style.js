@@ -94,7 +94,7 @@ export const styles = StyleSheet.create({
   // ✅ STYLES DES QUESTIONS ✅
   questionContainer: {
     position: "absolute",
-    top: height * 0.43, // Juste en dessous du container en position swipe haut
+    top: height * 0.44, // Juste en dessous du container en position swipe haut
     width: "90%",
     backgroundColor: "#192A56",
     paddingVertical: 15,
@@ -134,11 +134,11 @@ export const styles = StyleSheet.create({
 
   // ✅ STYLES DE LA DEUXIÈME QUESTION ✅
   secondQuestion: {
-    top: height * 0.57, // Positionné sous la première question
+    top: height * 0.59, // Positionné sous la première question
   },
 
   // ✅ STYLES DE LA TROISIÈME QUESTION ✅
   thirdQuestion: {
-    top: height * 0.71, // Positionné sous la deuxième question
+    top: height * 0.74, // Positionné sous la deuxième question
   },
 });

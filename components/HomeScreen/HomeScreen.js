@@ -33,10 +33,11 @@ const HomeScreen = () => {
   const translateX = useSharedValue(0);
   const opacity = useSharedValue(1);
   const bottomNavOpacity = useSharedValue(1);
-  const feedbackButtonsOpacity = useSharedValue(0);
+  const feedbackButtonsOpacity = useSharedValue(0); // ✅ Restauré
   const questionsOpacity = useSharedValue(0);
   const containerHeight = useSharedValue(height * 0.68);
   const containerPosition = useSharedValue(0);
+  const isSwipedUp = useSharedValue(false);
 
   const [currentStartupIndex, setCurrentStartupIndex] = useState(0);
   const [selectedOption1, setSelectedOption1] = useState(null);
@@ -57,7 +58,7 @@ const HomeScreen = () => {
   }));
 
   const feedbackButtonsStyle = useAnimatedStyle(() => ({
-    opacity: feedbackButtonsOpacity.value,
+    opacity: feedbackButtonsOpacity.value, // ✅ Correctif appliqué ici
   }));
 
   const questionsStyle = useAnimatedStyle(() => ({
@@ -65,43 +66,42 @@ const HomeScreen = () => {
   }));
 
   const goToNextStartup = () => {
-    if (currentStartupIndex < startups.length - 1) {
+    if (!isSwipedUp.value && currentStartupIndex < startups.length - 1) {
       setCurrentStartupIndex(currentStartupIndex + 1);
+      translateX.value = withTiming(0);
+      opacity.value = withTiming(1, { duration: 200 });
     }
-    translateX.value = withTiming(0);
-    opacity.value = withTiming(1, { duration: 200 });
   };
 
   const swipeGesture = Gesture.Pan()
     .onUpdate((event) => {
-      if (Math.abs(event.translationX) > Math.abs(event.translationY)) {
-        translateX.value = event.translationX * 0.4;
+      if (isSwipedUp.value) {
+        translateX.value = 0;
       } else {
-        translateY.value = event.translationY * 0.4;
+        if (Math.abs(event.translationX) > Math.abs(event.translationY)) {
+          translateX.value = event.translationX * 0.4;
+        } else {
+          translateY.value = event.translationY * 0.4;
+        }
       }
     })
     .onEnd((event) => {
-      if (event.translationY < -50) {
+      if (event.translationY < -50 && !isSwipedUp.value) {
         containerHeight.value = withSpring(height * 0.35);
         containerPosition.value = withSpring(-height * 0.26);
         translateY.value = withSpring(0);
         bottomNavOpacity.value = withTiming(0, { duration: 300 });
-        feedbackButtonsOpacity.value = withTiming(1, { duration: 300 });
+        feedbackButtonsOpacity.value = withTiming(1, { duration: 300 }); // ✅ Boutons feedback réapparaissent
         questionsOpacity.value = withTiming(1, { duration: 300 });
-      } else if (event.translationY > 50) {
+        isSwipedUp.value = true;
+      } else if (event.translationY > 50 && isSwipedUp.value) {
         containerHeight.value = withSpring(height * 0.68);
         containerPosition.value = withSpring(0);
         translateY.value = withSpring(0);
         bottomNavOpacity.value = withTiming(1, { duration: 300 });
-        feedbackButtonsOpacity.value = withTiming(0, { duration: 300 });
+        feedbackButtonsOpacity.value = withTiming(0, { duration: 300 }); // ✅ Boutons feedback disparaissent
         questionsOpacity.value = withTiming(0, { duration: 300 });
-      }
-
-      if (event.translationX < -100 || event.translationX > 100) {
-        opacity.value = withTiming(0, { duration: 200 }, () => {
-          runOnJS(goToNextStartup)();
-          opacity.value = withTiming(1, { duration: 200 });
-        });
+        isSwipedUp.value = false;
       } else {
         translateX.value = withSpring(0);
       }
@@ -132,17 +132,14 @@ const HomeScreen = () => {
         </Animated.View>
       </GestureDetector>
 
-      {/* QUESTIONS ET RÉPONSES */}
+      {/* QUESTIONS */}
       <Animated.View style={[styles.questionContainer, questionsStyle]}>
         <Text style={styles.questionText}>Question 1</Text>
         <View style={styles.optionsContainer}>
           {["Choix 1", "Choix 2", "Choix 3"].map((option) => (
             <TouchableOpacity
               key={option}
-              style={[
-                styles.optionButton,
-                selectedOption1 === option && styles.optionButtonSelected,
-              ]}
+              style={[styles.optionButton, selectedOption1 === option && styles.optionButtonSelected]}
               onPress={() => setSelectedOption1(option)}
             >
               <Text style={styles.optionText}>{option}</Text>
@@ -151,17 +148,13 @@ const HomeScreen = () => {
         </View>
       </Animated.View>
 
-      {/* DEUXIÈME QUESTION */}
       <Animated.View style={[styles.questionContainer, styles.secondQuestion, questionsStyle]}>
         <Text style={styles.questionText}>Question 2</Text>
         <View style={styles.optionsContainer}>
           {["Choix 1", "Choix 2", "Choix 3"].map((option) => (
             <TouchableOpacity
               key={option}
-              style={[
-                styles.optionButton,
-                selectedOption2 === option && styles.optionButtonSelected,
-              ]}
+              style={[styles.optionButton, selectedOption2 === option && styles.optionButtonSelected]}
               onPress={() => setSelectedOption2(option)}
             >
               <Text style={styles.optionText}>{option}</Text>
@@ -170,17 +163,13 @@ const HomeScreen = () => {
         </View>
       </Animated.View>
 
-      {/* TROISIÈME QUESTION */}
       <Animated.View style={[styles.questionContainer, styles.thirdQuestion, questionsStyle]}>
         <Text style={styles.questionText}>Question 3</Text>
         <View style={styles.optionsContainer}>
           {["Choix 1", "Choix 2", "Choix 3"].map((option) => (
             <TouchableOpacity
               key={option}
-              style={[
-                styles.optionButton,
-                selectedOption3 === option && styles.optionButtonSelected,
-              ]}
+              style={[styles.optionButton, selectedOption3 === option && styles.optionButtonSelected]}
               onPress={() => setSelectedOption3(option)}
             >
               <Text style={styles.optionText}>{option}</Text>
@@ -190,15 +179,9 @@ const HomeScreen = () => {
       </Animated.View>
 
       <Animated.View style={[styles.bottomNav, bottomNavStyle]}>
-        <TouchableOpacity style={styles.navItem}>
-          <FontAwesome5 name="users" size={24} color="#FFF" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="chatbubble-outline" size={24} color="#FFF" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="person-outline" size={24} color="#FFF" />
-        </TouchableOpacity>
+        <TouchableOpacity style={styles.navItem}><FontAwesome5 name="users" size={24} color="#FFF" /></TouchableOpacity>
+        <TouchableOpacity style={styles.navItem}><Ionicons name="chatbubble-outline" size={24} color="#FFF" /></TouchableOpacity>
+        <TouchableOpacity style={styles.navItem}><Ionicons name="person-outline" size={24} color="#FFF" /></TouchableOpacity>
       </Animated.View>
 
       <Animated.View style={[styles.feedbackButtonsContainer, feedbackButtonsStyle]}>
