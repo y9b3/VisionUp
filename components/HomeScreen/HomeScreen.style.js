@@ -63,31 +63,72 @@ export const styles = StyleSheet.create({
     textAlign: "center",
   },
 
-  // ✅ NOUVEAUX STYLES POUR LES BOUTONS FEEDBACK ✅
+  // ✅ STYLES DES BOUTONS FEEDBACK ✅
   feedbackButtonsContainer: {
     position: "absolute",
-    bottom: height * 0.04, // Même position que la barre de navigation
+    bottom: height * 0.04,
     width: "90%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    opacity: 0, // Commence invisible, géré par Animated
+    opacity: 0,
   },
   feedbackButton: {
-    width: "38%", // Réduction de la largeur
-    paddingVertical: 14, // Bouton plus fin
-    borderRadius: 23, // Coins moins arrondis
+    width: "38%",
+    paddingVertical: 14,
+    borderRadius: 23,
     alignItems: "center",
   },
   feedbackGreen: {
-    backgroundColor: "#3AB54A", // 🟩 Vert pour rédiger un feedback
+    backgroundColor: "#3AB54A",
   },
   feedbackBlue: {
-    backgroundColor: "#0074FF", // 🔵 Bleu pour envoyer
+    backgroundColor: "#0074FF",
   },
   feedbackButtonText: {
     color: "#FFF",
-    fontSize: 10, // Texte légèrement plus petit
+    fontSize: 10,
+    fontFamily: "Kanit_700Bold",
+  },
+
+  // ✅ STYLES DES QUESTIONS ✅
+  questionContainer: {
+    position: "absolute",
+    top: height * 0.43, // Juste en dessous du container en position swipe haut
+    width: "90%",
+    backgroundColor: "#192A56",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 15,
+    alignItems: "center",
+    opacity: 0, // Caché par défaut, animé par Reanimated
+  },
+  questionText: {
+    color: "#FFF",
+    fontSize: 16,
+    fontFamily: "Kanit_700Bold",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  optionsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  optionButton: {
+    flex: 1,
+    paddingVertical: 10,
+    marginHorizontal: 5,
+    backgroundColor: "#34495E",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  optionButtonSelected: {
+    backgroundColor: "#3AB54A",
+  },
+  optionText: {
+    color: "#FFF",
+    fontSize: 14,
     fontFamily: "Kanit_700Bold",
   },
 });

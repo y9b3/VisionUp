@@ -48,12 +48,14 @@ const HomeScreen = () => {
   const translateY = useSharedValue(0);
   const translateX = useSharedValue(0);
   const opacity = useSharedValue(1);
-  const bottomNavOpacity = useSharedValue(1); // Opacité de la barre de navigation
-  const feedbackButtonsOpacity = useSharedValue(0); // Opacité des boutons feedback
+  const bottomNavOpacity = useSharedValue(1);
+  const feedbackButtonsOpacity = useSharedValue(0);
+  const questionsOpacity = useSharedValue(0); // Ajouté pour l'affichage des questions
   const containerHeight = useSharedValue(height * 0.68);
   const containerPosition = useSharedValue(0);
 
   const [currentStartupIndex, setCurrentStartupIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -70,6 +72,10 @@ const HomeScreen = () => {
 
   const feedbackButtonsStyle = useAnimatedStyle(() => ({
     opacity: feedbackButtonsOpacity.value,
+  }));
+
+  const questionsStyle = useAnimatedStyle(() => ({
+    opacity: questionsOpacity.value,
   }));
 
   const goToNextStartup = () => {
@@ -94,18 +100,19 @@ const HomeScreen = () => {
         containerHeight.value = withSpring(height * 0.35);
         containerPosition.value = withSpring(-height * 0.26);
         translateY.value = withSpring(0);
-        bottomNavOpacity.value = withTiming(0, { duration: 300 }); // Disparition progressive de la barre de navigation
-        feedbackButtonsOpacity.value = withTiming(1, { duration: 300 }); // Apparition des boutons feedback
+        bottomNavOpacity.value = withTiming(0, { duration: 300 });
+        feedbackButtonsOpacity.value = withTiming(1, { duration: 300 });
+        questionsOpacity.value = withTiming(1, { duration: 300 }); // Afficher les questions
       } else if (event.translationY > 50) {
         containerHeight.value = withSpring(height * 0.68);
         containerPosition.value = withSpring(0);
         translateY.value = withSpring(0);
-        bottomNavOpacity.value = withTiming(1, { duration: 300 }); // Réapparition de la barre de navigation
-        feedbackButtonsOpacity.value = withTiming(0, { duration: 300 }); // Disparition des boutons feedback
+        bottomNavOpacity.value = withTiming(1, { duration: 300 });
+        feedbackButtonsOpacity.value = withTiming(0, { duration: 300 });
+        questionsOpacity.value = withTiming(0, { duration: 300 }); // Cacher les questions
       }
 
       if (event.translationX < -100 || event.translationX > 100) {
-        // SWIPE GAUCHE (J'aime) ou DROITE (Je n'aime pas) → Passe au projet suivant avec animation
         opacity.value = withTiming(0, { duration: 200 }, () => {
           runOnJS(goToNextStartup)();
           opacity.value = withTiming(1, { duration: 200 });
@@ -143,6 +150,40 @@ const HomeScreen = () => {
           </View>
         </Animated.View>
       </GestureDetector>
+
+      {/* QUESTIONS ET RÉPONSES */}
+      <Animated.View style={[styles.questionContainer, questionsStyle]}>
+        <Text style={styles.questionText}>Que pensez-vous du projet ?</Text>
+        <View style={styles.optionsContainer}>
+          <TouchableOpacity
+            style={[
+              styles.optionButton,
+              selectedOption === "Excellent" && styles.optionButtonSelected,
+            ]}
+            onPress={() => setSelectedOption("Excellent")}
+          >
+            <Text style={styles.optionText}>Excellent</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.optionButton,
+              selectedOption === "Moyen" && styles.optionButtonSelected,
+            ]}
+            onPress={() => setSelectedOption("Moyen")}
+          >
+            <Text style={styles.optionText}>Moyen</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.optionButton,
+              selectedOption === "À améliorer" && styles.optionButtonSelected,
+            ]}
+            onPress={() => setSelectedOption("À améliorer")}
+          >
+            <Text style={styles.optionText}>À améliorer</Text>
+          </TouchableOpacity>
+        </View>
+      </Animated.View>
 
       {/* Barre de navigation */}
       <Animated.View style={[styles.bottomNav, bottomNavStyle]}>
