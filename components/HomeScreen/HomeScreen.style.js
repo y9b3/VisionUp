@@ -131,4 +131,9 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Kanit_700Bold",
   },
+
+  // ✅ STYLES DE LA DEUXIÈME QUESTION ✅
+  secondQuestion: {
+    top: height * 0.57, // Positionné sous la première question
+  },
 });

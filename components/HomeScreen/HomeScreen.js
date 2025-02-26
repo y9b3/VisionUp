@@ -50,12 +50,13 @@ const HomeScreen = () => {
   const opacity = useSharedValue(1);
   const bottomNavOpacity = useSharedValue(1);
   const feedbackButtonsOpacity = useSharedValue(0);
-  const questionsOpacity = useSharedValue(0); // Ajouté pour l'affichage des questions
+  const questionsOpacity = useSharedValue(0);
   const containerHeight = useSharedValue(height * 0.68);
   const containerPosition = useSharedValue(0);
 
   const [currentStartupIndex, setCurrentStartupIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption1, setSelectedOption1] = useState(null);
+  const [selectedOption2, setSelectedOption2] = useState(null);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -102,14 +103,14 @@ const HomeScreen = () => {
         translateY.value = withSpring(0);
         bottomNavOpacity.value = withTiming(0, { duration: 300 });
         feedbackButtonsOpacity.value = withTiming(1, { duration: 300 });
-        questionsOpacity.value = withTiming(1, { duration: 300 }); // Afficher les questions
+        questionsOpacity.value = withTiming(1, { duration: 300 });
       } else if (event.translationY > 50) {
         containerHeight.value = withSpring(height * 0.68);
         containerPosition.value = withSpring(0);
         translateY.value = withSpring(0);
         bottomNavOpacity.value = withTiming(1, { duration: 300 });
         feedbackButtonsOpacity.value = withTiming(0, { duration: 300 });
-        questionsOpacity.value = withTiming(0, { duration: 300 }); // Cacher les questions
+        questionsOpacity.value = withTiming(0, { duration: 300 });
       }
 
       if (event.translationX < -100 || event.translationX > 100) {
@@ -155,33 +156,37 @@ const HomeScreen = () => {
       <Animated.View style={[styles.questionContainer, questionsStyle]}>
         <Text style={styles.questionText}>Que pensez-vous du projet ?</Text>
         <View style={styles.optionsContainer}>
-          <TouchableOpacity
-            style={[
-              styles.optionButton,
-              selectedOption === "Excellent" && styles.optionButtonSelected,
-            ]}
-            onPress={() => setSelectedOption("Excellent")}
-          >
-            <Text style={styles.optionText}>Excellent</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.optionButton,
-              selectedOption === "Moyen" && styles.optionButtonSelected,
-            ]}
-            onPress={() => setSelectedOption("Moyen")}
-          >
-            <Text style={styles.optionText}>Moyen</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.optionButton,
-              selectedOption === "À améliorer" && styles.optionButtonSelected,
-            ]}
-            onPress={() => setSelectedOption("À améliorer")}
-          >
-            <Text style={styles.optionText}>À améliorer</Text>
-          </TouchableOpacity>
+          {["Excellent", "Moyen", "À améliorer"].map((option) => (
+            <TouchableOpacity
+              key={option}
+              style={[
+                styles.optionButton,
+                selectedOption1 === option && styles.optionButtonSelected,
+              ]}
+              onPress={() => setSelectedOption1(option)}
+            >
+              <Text style={styles.optionText}>{option}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </Animated.View>
+
+      {/* DEUXIÈME QUESTION */}
+      <Animated.View style={[styles.questionContainer, styles.secondQuestion, questionsStyle]}>
+        <Text style={styles.questionText}>Le projet est-il innovant ?</Text>
+        <View style={styles.optionsContainer}>
+          {["Oui", "Non", "Peut-être"].map((option) => (
+            <TouchableOpacity
+              key={option}
+              style={[
+                styles.optionButton,
+                selectedOption2 === option && styles.optionButtonSelected,
+              ]}
+              onPress={() => setSelectedOption2(option)}
+            >
+              <Text style={styles.optionText}>{option}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </Animated.View>
 
