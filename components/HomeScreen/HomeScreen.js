@@ -77,61 +77,50 @@ const HomeScreen = () => {
 
   const swipeGesture = Gesture.Pan()
   .onUpdate((event) => {
-    if (!isSwipingHorizontally.value && !isSwipingVertically.value) {
-      // Détection du type de swipe au début du mouvement
-      if (Math.abs(event.translationX) > Math.abs(event.translationY)) {
-        isSwipingHorizontally.value = true; // On verrouille en mode horizontal
-      } else {
-        isSwipingVertically.value = true; // On verrouille en mode vertical
+    if (isSwipedUp.value) {
+      // 🔹 Le container est en position haute : on bloque les swipes latéraux et vers le haut
+      if (event.translationY > 0) {
+        translateY.value = event.translationY * 0.4; // Autorise seulement le swipe vers le bas
       }
-    }
-
-    if (isSwipingHorizontally.value) {
-      translateX.value = event.translationX * 0.3;
-    }
-
-    if (isSwipingVertically.value) {
-      translateY.value = event.translationY * 0.3;
+      translateX.value = 0; // Bloque les swipes horizontaux
+    } else {
+      // 🔹 Détection de la direction principale du swipe
+      if (Math.abs(event.translationX) > Math.abs(event.translationY)) {
+        // 🔸 Swipe horizontal détecté : On bloque le vertical
+        translateX.value = event.translationX * 0.4;
+        translateY.value = 0;
+      } else {
+        // 🔸 Swipe vertical détecté : On bloque l'horizontal
+        translateY.value = event.translationY * 0.4;
+        translateX.value = 0;
+      }
     }
   })
   .onEnd((event) => {
-    if (isSwipingHorizontally.value) {
-      // Gestion du swipe horizontal
-      if (Math.abs(event.translationX) > 50 && !isSwipedUp.value) {
-        runOnJS(goToNextStartup)();
-      }
+    if (event.translationY < -50 && !isSwipedUp.value) {
+      // ✅ Swipe vers le haut (uniquement si pas déjà en haut)
+      containerHeight.value = withSpring(height * 0.35, { damping: 10, stiffness: 120 });
+      containerPosition.value = withSpring(-height * 0.26, { damping: 10, stiffness: 120 });
+      translateY.value = withSpring(0);
+      bottomNavOpacity.value = withTiming(0, { duration: 300 });
+      feedbackButtonsOpacity.value = withTiming(1, { duration: 300 });
+      questionsOpacity.value = withTiming(1, { duration: 300 });
+      isSwipedUp.value = true;
+    } 
+    else if (event.translationY > 50 && isSwipedUp.value) {
+      // ✅ Swipe bas pour revenir à la position d'origine
+      containerHeight.value = withSpring(height * 0.68, { damping: 10, stiffness: 120 });
+      containerPosition.value = withSpring(0, { damping: 10, stiffness: 120 });
+      translateY.value = withSpring(0, { damping: 8, stiffness: 150 }); // Ajout du rebond
+      bottomNavOpacity.value = withTiming(1, { duration: 300 });
+      feedbackButtonsOpacity.value = withTiming(0, { duration: 300 });
+      questionsOpacity.value = withTiming(0, { duration: 300 });
+      isSwipedUp.value = false;
+    } else {
+      // ✅ Effet rebond même si le swipe est incomplet
       translateX.value = withSpring(0, { damping: 8, stiffness: 150 });
+      translateY.value = withSpring(0, { damping: 8, stiffness: 150 });
     }
-
-    if (isSwipingVertically.value) {
-      if (event.translationY < -50 && !isSwipedUp.value) {
-        containerHeight.value = withSpring(height * 0.35, { damping: 10, stiffness: 120 });
-        containerPosition.value = withSpring(-height * 0.26, { damping: 10, stiffness: 120 });
-        translateY.value = withSpring(0);
-        translateX.value = withSpring(0);
-        bottomNavOpacity.value = withTiming(0, { duration: 300 });
-        feedbackButtonsOpacity.value = withTiming(1, { duration: 300 });
-        questionsOpacity.value = withTiming(1, { duration: 300 });
-        isSwipedUp.value = true;
-      } 
-      else if (event.translationY > 50 && isSwipedUp.value) {
-        containerHeight.value = withSpring(height * 0.68, { damping: 10, stiffness: 120 });
-        containerPosition.value = withSpring(0, { damping: 10, stiffness: 120 });
-        translateY.value = withSpring(10, { damping: 8, stiffness: 200 }); // Ajout du rebond léger
-        translateY.value = withSpring(0, { damping: 8, stiffness: 150 }); // Retour à la position normale
-        translateX.value = withSpring(0);
-        bottomNavOpacity.value = withTiming(1, { duration: 300 });
-        feedbackButtonsOpacity.value = withTiming(0, { duration: 300 });
-        questionsOpacity.value = withTiming(0, { duration: 300 });
-        isSwipedUp.value = false;
-      } else {
-        translateY.value = withSpring(0, { damping: 8, stiffness: 150 });
-      }
-    }
-
-    // ✅ Reset du verrou de direction après chaque swipe
-    isSwipingHorizontally.value = false;
-    isSwipingVertically.value = false;
   });
 
   if (!fontsLoaded) {
