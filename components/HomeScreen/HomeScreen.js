@@ -72,40 +72,67 @@ const HomeScreen = () => {
       opacity.value = withTiming(1, { duration: 200 });
     }
   };
+  const isSwipingHorizontally = useSharedValue(false);
+  const isSwipingVertically = useSharedValue(false);
 
   const swipeGesture = Gesture.Pan()
-    .onUpdate((event) => {
-      if (isSwipedUp.value) {
-        translateX.value = 0;
+  .onUpdate((event) => {
+    if (!isSwipingHorizontally.value && !isSwipingVertically.value) {
+      // Détection du type de swipe au début du mouvement
+      if (Math.abs(event.translationX) > Math.abs(event.translationY)) {
+        isSwipingHorizontally.value = true; // On verrouille en mode horizontal
       } else {
-        if (Math.abs(event.translationX) > Math.abs(event.translationY)) {
-          translateX.value = event.translationX * 0.4;
-        } else {
-          translateY.value = event.translationY * 0.4;
-        }
+        isSwipingVertically.value = true; // On verrouille en mode vertical
       }
-    })
-    .onEnd((event) => {
+    }
+
+    if (isSwipingHorizontally.value) {
+      translateX.value = event.translationX * 0.3;
+    }
+
+    if (isSwipingVertically.value) {
+      translateY.value = event.translationY * 0.3;
+    }
+  })
+  .onEnd((event) => {
+    if (isSwipingHorizontally.value) {
+      // Gestion du swipe horizontal
+      if (Math.abs(event.translationX) > 50 && !isSwipedUp.value) {
+        runOnJS(goToNextStartup)();
+      }
+      translateX.value = withSpring(0, { damping: 8, stiffness: 150 });
+    }
+
+    if (isSwipingVertically.value) {
       if (event.translationY < -50 && !isSwipedUp.value) {
-        containerHeight.value = withSpring(height * 0.35);
-        containerPosition.value = withSpring(-height * 0.26);
+        containerHeight.value = withSpring(height * 0.35, { damping: 10, stiffness: 120 });
+        containerPosition.value = withSpring(-height * 0.26, { damping: 10, stiffness: 120 });
         translateY.value = withSpring(0);
+        translateX.value = withSpring(0);
         bottomNavOpacity.value = withTiming(0, { duration: 300 });
-        feedbackButtonsOpacity.value = withTiming(1, { duration: 300 }); // ✅ Boutons feedback réapparaissent
+        feedbackButtonsOpacity.value = withTiming(1, { duration: 300 });
         questionsOpacity.value = withTiming(1, { duration: 300 });
         isSwipedUp.value = true;
-      } else if (event.translationY > 50 && isSwipedUp.value) {
-        containerHeight.value = withSpring(height * 0.68);
-        containerPosition.value = withSpring(0);
-        translateY.value = withSpring(0);
+      } 
+      else if (event.translationY > 50 && isSwipedUp.value) {
+        containerHeight.value = withSpring(height * 0.68, { damping: 10, stiffness: 120 });
+        containerPosition.value = withSpring(0, { damping: 10, stiffness: 120 });
+        translateY.value = withSpring(10, { damping: 8, stiffness: 200 }); // Ajout du rebond léger
+        translateY.value = withSpring(0, { damping: 8, stiffness: 150 }); // Retour à la position normale
+        translateX.value = withSpring(0);
         bottomNavOpacity.value = withTiming(1, { duration: 300 });
-        feedbackButtonsOpacity.value = withTiming(0, { duration: 300 }); // ✅ Boutons feedback disparaissent
+        feedbackButtonsOpacity.value = withTiming(0, { duration: 300 });
         questionsOpacity.value = withTiming(0, { duration: 300 });
         isSwipedUp.value = false;
       } else {
-        translateX.value = withSpring(0);
+        translateY.value = withSpring(0, { damping: 8, stiffness: 150 });
       }
-    });
+    }
+
+    // ✅ Reset du verrou de direction après chaque swipe
+    isSwipingHorizontally.value = false;
+    isSwipingVertically.value = false;
+  });
 
   if (!fontsLoaded) {
     return null;
