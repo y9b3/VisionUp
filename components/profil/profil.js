@@ -1,0 +1,1 @@
+import s from "./profil.style";
