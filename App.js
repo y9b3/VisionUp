@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import {
   createStackNavigator,
   TransitionPresets,
@@ -7,7 +8,7 @@ import { View, ActivityIndicator } from "react-native";
 import LoginScreen from "./components/loginScreen/LoginScreen";
 import InscriptionStep1 from "./components/Inscription/InscriptionStep1";
 import InscriptionStep2 from "./components/Inscription/InscriptionStep2";
-import HomeScreen from "./components/HomeScreen/HomeScreen"; 
+import HomeScreen from "./components/HomeScreen/HomeScreen";
 import LoadingScreen from "./components/LoadingScreen/LoadingScreen"; // ✅ Ajout de LoadingScreen
 
 import { useFonts } from "expo-font"; // Import des fonts
@@ -46,14 +47,16 @@ export default function App() {
           name="Loading"
           component={LoadingScreen} // ✅ Ajout de l'écran de chargement
           options={{
-            cardStyleInterpolator: TransitionPresets.FadeFromBottomAndroid.cardStyleInterpolator, // ✅ Effet de fondu
+            cardStyleInterpolator:
+              TransitionPresets.FadeFromBottomAndroid.cardStyleInterpolator, // ✅ Effet de fondu
           }}
         />
         <Stack.Screen
           name="Home"
           component={HomeScreen} // ✅ HomeScreen après LoadingScreen
           options={{
-            cardStyleInterpolator: TransitionPresets.FadeFromBottomAndroid.cardStyleInterpolator, // ✅ Animation fluide
+            cardStyleInterpolator:
+              TransitionPresets.FadeFromBottomAndroid.cardStyleInterpolator, // ✅ Animation fluide
           }}
         />
         <Stack.Screen

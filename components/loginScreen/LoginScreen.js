@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { API_URL } from "@env";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   View,
@@ -17,17 +18,32 @@ const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       alert("Veuillez remplir tous les champs !");
       return;
     }
 
-    console.log("Email:", email);
-    console.log("Mot de passe:", password);
+    try {
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    // ✅ Navigation vers LoadingScreen AVANT HomeScreen
-    navigation.navigate("Loading");
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Connexion réussie !", data);
+        alert("Connexion réussie !");
+        navigation.navigate("Home"); // Rediriger vers HomeScreen
+      } else {
+        alert(data.message || "Erreur de connexion");
+      }
+    } catch (error) {
+      console.error("Erreur:", error);
+      alert("Erreur de serveur");
+    }
   };
 
   return (
