@@ -19,6 +19,8 @@ const InscriptionStep1 = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [nom, setNom] = useState("");
+  const [prenom, setPrenom] = useState("");
 
   // Animation de glitch
   const shakeAnimation = useRef(new Animated.Value(0)).current;
@@ -59,7 +61,7 @@ const InscriptionStep1 = ({ navigation }) => {
 
   // Vérifier si tout est rempli et valide
   const isPasswordValid = Object.values(passwordValidations).every(Boolean);
-  const isFormValid = email && password && confirmPassword;
+  const isFormValid = email && password && confirmPassword && nom && prenom;
   const isNextButtonEnabled = isFormValid && isPasswordValid;
 
   const handleNextStep = () => {
@@ -82,7 +84,7 @@ const InscriptionStep1 = ({ navigation }) => {
     }
 
     setErrorMessage("");
-    navigation.navigate("InscriptionStep2", { email, password });
+    navigation.navigate("InscriptionStep2", { email, password, nom, prenom });
   };
 
   return (
@@ -102,10 +104,6 @@ const InscriptionStep1 = ({ navigation }) => {
             ]}
           >
             {/* 🔹 Logo en haut */}
-            <Image
-              source={require("../../assets/logo.png")}
-              style={styles.logo}
-            />
 
             {/* Titre */}
             <Text style={styles.subtitle}>INSCRIPTION - ÉTAPE 1</Text>
@@ -122,6 +120,19 @@ const InscriptionStep1 = ({ navigation }) => {
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Nom"
+                value={nom}
+                onChangeText={setNom}
+              />
+
+              <TextInput
+                style={styles.input}
+                placeholder="Prénom"
+                value={prenom}
+                onChangeText={setPrenom}
               />
               <TextInput
                 style={styles.input}

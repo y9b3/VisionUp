@@ -11,7 +11,7 @@ import * as ImagePicker from "expo-image-picker";
 import { styles } from "./InscriptionStep2.style";
 
 const InscriptionStep2 = ({ route, navigation }) => {
-  const { email, password } = route.params;
+  const { email, password, nom, prenom } = route.params;
 
   const [pseudo, setPseudo] = useState("");
   const [secteur, setSecteur] = useState("");
@@ -61,23 +61,51 @@ const InscriptionStep2 = ({ route, navigation }) => {
     }
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!pseudo) {
       setErrorMessage("Le pseudo est obligatoire !");
       triggerShake();
       return;
     }
 
-    console.log("Inscription réussie !");
-    console.log({
+    const userData = {
       email,
       password,
+      nom,
+      prenom,
       pseudo,
-      secteur,
+      secteurActivite: secteur,
       siteWeb,
       entreprise,
-      profileImage,
-    });
+      bio: "",
+      avatar: profileImage || "https://example.com/default-avatar.png",
+    };
+
+    try {
+      const response = await fetch("http://localhost:8001/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("✅ Utilisateur inscrit avec succès :", data);
+        alert("Inscription réussie !");
+        navigation.navigate("Login"); // ✅ Redirige vers la connexion
+      } else {
+        console.error("❌ Erreur lors de l'inscription :", data);
+        setErrorMessage(data.message || "Une erreur est survenue.");
+        triggerShake();
+      }
+    } catch (error) {
+      console.error("❌ Erreur serveur :", error);
+      setErrorMessage("Problème de connexion avec le serveur.");
+      triggerShake();
+    }
   };
 
   const isDisabled = !pseudo;
