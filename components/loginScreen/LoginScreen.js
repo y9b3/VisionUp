@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { API_URL } from "@env";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   View,
   Text,
@@ -35,6 +36,10 @@ const LoginScreen = ({ navigation }) => {
 
       if (response.ok) {
         console.log("Connexion réussie !", data);
+
+        // ✅ Sauvegarde du pseudo de l'utilisateur dans AsyncStorage
+        await AsyncStorage.setItem("pseudo", JSON.stringify(data.user.pseudo));
+
         alert("Connexion réussie !");
         navigation.navigate("Home"); // Rediriger vers HomeScreen
       } else {
